@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Audio
         }
     }
 
-    internal sealed class OpenALSoundController : IDisposable
+    public class OpenALSoundController : IDisposable
     {
         private static OpenALSoundController _instance = null;
         private static EffectsExtension _efx = null;

@@ -686,7 +686,7 @@ namespace MonoGame.OpenAL
         }
     }
 
-    internal class EffectsExtension
+    public class EffectsExtension
     {
         /* Effect API */
 
