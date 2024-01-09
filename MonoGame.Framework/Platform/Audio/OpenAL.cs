@@ -117,6 +117,15 @@ namespace MonoGame.OpenAL
         Extensions = 0x1006,
     }
 
+    internal enum AlcEvent
+    {
+        EventTypeDefaultDeviceChangedSoft = 0x19D6,
+        EventTypeDeviceAddedSoft = 0x19D7,
+        EventTypeDeviceRemovedSoft = 0x19D8,
+        EventSupportedSoft = 0x19D9,
+        EventNotSupportedSoft = 0x19DA,
+    }
+
     internal enum AlcGetInteger
     {
         CaptureSamples = 0x0312,
@@ -558,6 +567,23 @@ namespace MonoGame.OpenAL
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alcopendevice(string device);
         internal static d_alcopendevice OpenDevice = FuncLoader.LoadFunction<d_alcopendevice>(AL.NativeLibrary, "alcOpenDevice");
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate IntPtr d_alcreopendevice(string device);
+        internal static d_alcreopendevice ReopenDevice = FuncLoader.LoadFunction<d_alcreopendevice>(AL.NativeLibrary, "alcReopenDeviceSOFT");
+
+        // Event
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void d_alceventcontrolsoft(int count, int events, bool enable);
+        internal static d_alceventcontrolsoft EventControl = FuncLoader.LoadFunction<d_alceventcontrolsoft>(AL.NativeLibrary, "alcEventControlSOFT");
+
+        
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void d_eventcallbacksoft(Action callback);
+        internal static d_eventcallbacksoft EventCallback = FuncLoader.LoadFunction<d_eventcallbacksoft>(AL.NativeLibrary, "alcEventCallbackSOFT");
+
+        // ...
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alccaptureopendevice(string device, uint sampleRate, int format, int sampleSize);

@@ -138,6 +138,30 @@ namespace Microsoft.Xna.Framework.Audio
             Dispose(false);
         }
 
+        private void OpenChange()
+        {
+            // Enable receiving disconnection events
+            Alc.EventControl(1, AlcEvent.EventTypeDefaultDeviceChangedSoft, true);
+            // Set callback
+            Alc.EventCallback(EventCallback);
+        }
+
+        private void EventCallback()
+        {
+            var a = 1;
+        }
+
+//         static void ALC_APIENTRY _onALCEvent(ALCenum eventType,
+//                                      ALCenum deviceType,
+//                                      ALCdevice* device,
+//                                      ALCsizei length,
+//                                      const ALCchar* message,
+//                                      void* userParam) AL_API_NOEXCEPT17
+// {
+//     if (eventType == ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT)
+//         alcReopenDeviceOnAxmolThread();
+// }
+
         /// <summary>
         /// Open the sound device, sets up an audio context, and makes the new context
         /// the current context. Note that this method will stop the playback of
@@ -151,6 +175,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 _device = Alc.OpenDevice(string.Empty);
                 EffectsExtension.device = _device;
+                OpenChange();
             }
             catch (Exception ex)
             {
