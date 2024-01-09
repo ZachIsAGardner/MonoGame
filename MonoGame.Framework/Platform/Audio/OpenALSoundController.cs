@@ -138,10 +138,23 @@ namespace Microsoft.Xna.Framework.Audio
             Dispose(false);
         }
 
+        public static string AlcGetStringNull(int p)
+        {
+            if (_instance == null) return null;
+            return Alc.GetString(IntPtr.Zero, p);
+
+        }
+
+        public static string AlcGetString(int p)
+        {
+            if (_instance == null || _instance._device == null) return null;
+            return Alc.GetString(_instance._device, p);
+        }
+
         private void OpenChange()
         {
             // Enable receiving disconnection events
-            Alc.EventControl(1, AlcEvent.EventTypeDefaultDeviceChangedSoft, true);
+            Alc.EventControl(1, (int)AlcEvent.EventTypeDefaultDeviceChangedSoft, true);
             // Set callback
             Alc.EventCallback(EventCallback);
         }
@@ -175,7 +188,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 _device = Alc.OpenDevice(string.Empty);
                 EffectsExtension.device = _device;
-                OpenChange();
+                // OpenChange();
             }
             catch (Exception ex)
             {
@@ -332,6 +345,12 @@ namespace Microsoft.Xna.Framework.Audio
                     throw (new NoAudioHardwareException("Failed to init OpenALSoundController", ex));
                 }
             }
+        }
+
+        public static void Reset()
+        {
+            DestroyInstance();
+            EnsureInitialized();
         }
 
 

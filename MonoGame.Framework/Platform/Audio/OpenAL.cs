@@ -34,7 +34,7 @@ namespace MonoGame.OpenAL
         OutOfMemory = 0xA005,
     }
 
-    internal enum ALGetString
+    public enum ALGetString
     {
         Extensions = 0xB004,
     }
@@ -110,11 +110,15 @@ namespace MonoGame.OpenAL
         NoError = 0,
     }
 
-    internal enum AlcGetString
+    public enum AlcGetString
     {
         CaptureDeviceSpecifier = 0x0310,
         CaptureDefaultDeviceSpecifier = 0x0311,
+        DefaultDeviceSpecifier = 0x1004,
+        DeviceSpecifier = 0x1005,
         Extensions = 0x1006,
+        DefaultAllDevicesSpecifier = 0x1012,
+        AllDevicesSpecifier = 0x1013
     }
 
     internal enum AlcEvent
@@ -198,7 +202,7 @@ namespace MonoGame.OpenAL
         Reverb = 0x8000,
     }
 
-    internal class AL
+    public class AL
     {
         public static IntPtr NativeLibrary = GetNativeLibrary();
 
@@ -513,18 +517,18 @@ namespace MonoGame.OpenAL
         private delegate IntPtr d_algetstring(int p);
         private static d_algetstring alGetString = FuncLoader.LoadFunction<d_algetstring>(NativeLibrary, "alGetString");
 
-        internal static string GetString(int p)
+        public static string GetString(int p)
         {
             return Marshal.PtrToStringAnsi(alGetString(p));
         }
 
-        internal static string Get(ALGetString p)
+        public static string Get(ALGetString p)
         {
             return GetString((int)p);
         }
     }
 
-    internal partial class Alc
+    public partial class Alc
     {
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate IntPtr d_alccreatecontext(IntPtr device, int[] attributes);
@@ -618,12 +622,12 @@ namespace MonoGame.OpenAL
         internal delegate IntPtr d_alcgetstring(IntPtr device, int p);
         internal static d_alcgetstring alcGetString = FuncLoader.LoadFunction<d_alcgetstring>(AL.NativeLibrary, "alcGetString");
 
-        internal static string GetString(IntPtr device, int p)
+        public static string GetString(IntPtr device, int p)
         {
             return Marshal.PtrToStringAnsi(alcGetString(device, p));
         }
 
-        internal static string GetString(IntPtr device, AlcGetString p)
+        public static string GetString(IntPtr device, AlcGetString p)
         {
             return GetString(device, (int)p);
         }
