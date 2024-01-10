@@ -578,13 +578,25 @@ namespace MonoGame.OpenAL
 
         // Event
 
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        internal delegate void EventCallbackSoftProc(int eventType, int obj, int param, int length, IntPtr message, IntPtr userParam);
+        // from
+        //(ALenum eventType, ALuint object, ALuint param, ALsizei length, const ALchar* message, void* userParam)
+
+        // [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        // delegate void DebugMessageCallbackProc(int source, int type, int id, int severity, int length, IntPtr message, IntPtr userParam);
+        // to
+        //(int source, int type, int id, int severity, int length, IntPtr message, IntPtr userParam);
+        // from
+        // (ALenum source, ALenum type, ALuint id, ALenum severity, ALsizei length, const ALchar *message, void *userParam)
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alceventcontrolsoft(int count, int events, bool enable);
         internal static d_alceventcontrolsoft EventControl = FuncLoader.LoadFunction<d_alceventcontrolsoft>(AL.NativeLibrary, "alEventControlSOFT");
 
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void d_eventcallbacksoft(Action callback);
+        internal delegate void d_eventcallbacksoft(EventCallbackSoftProc callback, IntPtr userParam);
         internal static d_eventcallbacksoft EventCallback = FuncLoader.LoadFunction<d_eventcallbacksoft>(AL.NativeLibrary, "alEventCallbackSOFT");
 
         // ...

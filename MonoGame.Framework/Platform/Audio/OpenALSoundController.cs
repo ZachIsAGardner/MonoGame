@@ -155,11 +155,13 @@ namespace Microsoft.Xna.Framework.Audio
         {
             // Enable receiving disconnection events
             Alc.EventControl(1, (int)AlcEvent.EventTypeDefaultDeviceChangedSoft, true);
+
             // Set callback
-            Alc.EventCallback(EventCallback);
+            Alc.EventCallback(EventCallback, IntPtr.Zero);
         }
 
-        private void EventCallback()
+        // Doesn't get triggered :(
+        private void EventCallback(int eventType, int obj, int param, int length, IntPtr message, IntPtr userParam)
         {
             var a = 1;
         }
