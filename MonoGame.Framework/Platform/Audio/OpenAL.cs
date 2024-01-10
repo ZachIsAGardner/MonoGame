@@ -580,12 +580,12 @@ namespace MonoGame.OpenAL
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_alceventcontrolsoft(int count, int events, bool enable);
-        internal static d_alceventcontrolsoft EventControl = FuncLoader.LoadFunction<d_alceventcontrolsoft>(AL.NativeLibrary, "alcEventControlSOFT");
+        internal static d_alceventcontrolsoft EventControl = FuncLoader.LoadFunction<d_alceventcontrolsoft>(AL.NativeLibrary, "alEventControlSOFT");
 
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void d_eventcallbacksoft(Action callback);
-        internal static d_eventcallbacksoft EventCallback = FuncLoader.LoadFunction<d_eventcallbacksoft>(AL.NativeLibrary, "alcEventCallbackSOFT");
+        internal static d_eventcallbacksoft EventCallback = FuncLoader.LoadFunction<d_eventcallbacksoft>(AL.NativeLibrary, "alEventCallbackSOFT");
 
         // ...
 
