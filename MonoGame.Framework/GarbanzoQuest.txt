@@ -1,0 +1,12 @@
+# HOW TO BUILD FOR GARBANZO QUEST:
+https://stackoverflow.com/questions/10240029/how-do-i-install-a-nuget-package-nupkg-file-locally
+
+Open DesktopGL in Visual Studio Community
+Right Click DesktopGL and select pack
+
+You might run into this issue:
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS0579	Duplicate 'global::System.Runtime.Versioning.TargetFrameworkAttribute' attribute	MonoGame.Framework.DesktopGL	C:\Users\zachi\Creative\GameDevelopment\MonoGame\ThirdParty\StbImageWriteSharp\src\obj\Debug\netstandard2.0\.NETStandard,Version=v2.0.AssemblyAttributes.cs	4	Active
+
+I have no idea why it happens or how to fix it for real, but you have to delete the local repo and re-pull it form GitHub to get it to go away.
+

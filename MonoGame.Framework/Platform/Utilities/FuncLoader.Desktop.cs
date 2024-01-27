@@ -4,9 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace MonoGame.Framework.Utilities
 {
-    internal class FuncLoader
+    public class FuncLoader
     {
-        private class Windows
+        public class Windows
         {
             [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
             public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);

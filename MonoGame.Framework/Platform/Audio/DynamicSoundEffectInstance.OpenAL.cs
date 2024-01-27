@@ -121,27 +121,34 @@ namespace Microsoft.Xna.Framework.Audio
 
         private void PlatformUpdateQueue()
         {
-            // Get the completed buffers
-            AL.GetError();
-            int numBuffers;
-            AL.GetSource(SourceId, ALGetSourcei.BuffersProcessed, out numBuffers);
-            ALHelper.CheckError("Failed to get processed buffer count.");
-
-            // Unqueue them
-            if (numBuffers > 0)
+            try
             {
-                AL.SourceUnqueueBuffers(SourceId, numBuffers);
-                ALHelper.CheckError("Failed to unqueue buffers.");
-                for (int i = 0; i < numBuffers; i++)
-                {
-                    var buffer = _queuedBuffers.Dequeue();
-                    buffer.Dispose();
-                }
-            }
+                // Get the completed buffers
+                AL.GetError();
+                int numBuffers;
+                AL.GetSource(SourceId, ALGetSourcei.BuffersProcessed, out numBuffers);
+                ALHelper.CheckError("Failed to get processed buffer count.");
 
-            // Raise the event for each removed buffer, if needed
-            for (int i = 0; i < numBuffers; i++)
-                CheckBufferCount();
+                // Unqueue them
+                if (numBuffers > 0)
+                {
+                    AL.SourceUnqueueBuffers(SourceId, numBuffers);
+                    ALHelper.CheckError("Failed to unqueue buffers.");
+                    for (int i = 0; i < numBuffers; i++)
+                    {
+                        var buffer = _queuedBuffers.Dequeue();
+                        buffer.Dispose();
+                    }
+                }
+
+                // Raise the event for each removed buffer, if needed
+                for (int i = 0; i < numBuffers; i++)
+                    CheckBufferCount();
+            }
+            catch(Exception error)
+            {
+                PlatformStop();
+            }
         }
     }
 }
