@@ -1,14 +1,11 @@
-// MonoGame - Copyright (C) The MonoGame Team
+// MonoGame - Copyright (C) MonoGame Foundation, Inc
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using Microsoft.Xna.Framework;
-using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame.Framework
 {

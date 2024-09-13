@@ -1,4 +1,4 @@
-// MonoGame - Copyright (C) The MonoGame Team
+// MonoGame - Copyright (C) MonoGame Foundation, Inc
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
@@ -18,7 +18,6 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Framework
 {
-    [CLSCompliant(false)]
     public class MonoGameAndroidGameView : SurfaceView, ISurfaceHolderCallback, View.IOnTouchListener
     {
         // What is the state of the app, for tracking surface recreation inside this class.
@@ -104,7 +103,7 @@ namespace Microsoft.Xna.Framework
 
         public void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
         {
-            // Set flag to recreate gl surface or rendering can be bad on orienation change or if app 
+            // Set flag to recreate gl surface or rendering can be bad on orientation change or if app 
             // is closed in one orientation and re-opened in another.
             lock (_lockObject)
             {
@@ -391,7 +390,7 @@ namespace Microsoft.Xna.Framework
 
         void processStateRunning(CancellationToken token)
         {
-            // do not run game if surface is not avalible
+            // do not run game if surface is not available
             lock (_lockObject)
             {
                 if (!androidSurfaceAvailable)
@@ -419,7 +418,7 @@ namespace Microsoft.Xna.Framework
             }
             catch (MonoGameGLException ex)
             {
-                Log.Error("AndroidGameView", "GL Exception occured during RunIteration {0}", ex.Message);
+                Log.Error("AndroidGameView", "GL Exception occurred during RunIteration {0}", ex.Message);
             }
 
             if (updates > 0)
@@ -482,7 +481,7 @@ namespace Microsoft.Xna.Framework
                 if (!androidSurfaceAvailable)
                     return;
 
-                // create surface if context is avalible
+                // create surface if context is available
                 if (glContextAvailable && !lostglContext)
                 {
                     try
@@ -496,7 +495,7 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                // create context if not avalible
+                // create context if not available
                 if ((!glContextAvailable || lostglContext))
                 {
                     // Start or Restart due to context loss
@@ -1149,15 +1148,30 @@ namespace Microsoft.Xna.Framework
 
         #region Key and Motion
 
+        private bool IsKeyboard(InputDevice device)
+        {
+            if (device == null)
+                return false;
+            var sources = device.Sources;
+            return (sources & InputSourceType.Keyboard) == InputSourceType.Keyboard && device.VendorId != 0 && device.ProductId != 0;
+        }
+
+        private bool IsGamePad(InputDevice device) {
+            if (device == null)
+                return false;
+            var sources = device.Sources;
+            return ((sources & InputSourceType.Gamepad) == InputSourceType.Gamepad || (sources & InputSourceType.Joystick) == InputSourceType.Joystick) && device.VendorId != 0 && device.ProductId != 0 ;
+        }
+
         public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
         {
             bool handled = false;
-            if (GamePad.OnKeyDown(keyCode, e))
+            if (IsGamePad (e.Device) && GamePad.OnKeyDown(keyCode, e))
                 return true;
 
-            handled = Keyboard.KeyDown(keyCode);
+            handled = IsKeyboard (e.Device) && Keyboard.KeyDown(keyCode);
 
-            // we need to handle the Back key here because it doesnt work any other way
+            // we need to handle the Back key here because it doesn't work any other way
             if (keyCode == Keycode.Back)
             {
                 GamePad.Back = true;
@@ -1185,14 +1199,14 @@ namespace Microsoft.Xna.Framework
         {
             if (keyCode == Keycode.Back)
                 GamePad.Back = false;
-            if (GamePad.OnKeyUp(keyCode, e))
+            if (IsGamePad (e.Device) && GamePad.OnKeyUp(keyCode, e))
                 return true;
-            return Keyboard.KeyUp(keyCode);
+            return IsKeyboard (e.Device) && Keyboard.KeyUp(keyCode);
         }
 
         public override bool OnGenericMotionEvent(MotionEvent e)
         {
-            if (GamePad.OnGenericMotionEvent(e))
+            if (IsGamePad (e.Device) && GamePad.OnGenericMotionEvent(e))
                 return true;
 
             return base.OnGenericMotionEvent(e);
